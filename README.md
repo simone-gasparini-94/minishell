@@ -1,6 +1,11 @@
 ## Description
 Simplified shell that replicates many fundamental behaviours of **bash**.
+
 It uses the **readline** API for input handling.
+
+This project is collaboration with Dante Uccello:
+
+https://github.com/duccello
 
 ## Features
 - Built-in commands:
