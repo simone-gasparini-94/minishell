@@ -6,7 +6,7 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 12:48:38 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/03 15:02:56 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/22 14:21:35 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@ void	ft_export(t_cmd *p)
 {
 	t_node	*node;
 
+	if (p->argv[1] == NULL)
+		return ;
+	if (ft_strchr(p->argv[1], '=') == NULL)
+		return ;
 	if (is_var_dup(p->argv[1], p->data->envp) == true)
 		delete_node(&p->data->envp, p->argv[1], find_equal(p->argv[1]));
 	node = create_node(p->argv[1]);
