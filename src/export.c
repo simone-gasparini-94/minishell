@@ -6,7 +6,7 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 12:48:38 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/24 11:54:59 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/24 11:58:28 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-static bool is_parameter_name_invalid(char *s);
+static bool	is_parameter_name_invalid(char *s);
 static bool	is_var_dup(char *s, t_node *list);
 static int	find_equal(char *s);
 
@@ -37,7 +37,7 @@ void	ft_export(t_cmd *p)
 		if (is_parameter_name_invalid(p->argv[i]) == true)
 		{
 			ft_fprintf(STDERR_FILENO,
-					"export: %s: invalid parameter name\n", p->argv[i]);
+				"export: %s: invalid parameter name\n", p->argv[i]);
 			p->data->ret_val = 1;
 		}
 		else if (ft_strchr(p->argv[i], '=') == NULL)
@@ -53,7 +53,7 @@ void	ft_export(t_cmd *p)
 	}
 }
 
-static bool is_parameter_name_invalid(char *s)
+static bool	is_parameter_name_invalid(char *s)
 {
 	size_t	i;
 

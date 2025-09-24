@@ -6,7 +6,7 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 13:31:40 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/24 11:41:16 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/24 12:00:04 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static bool is_parameter_name_invalid(char *s);
+static bool	is_parameter_name_invalid(char *s);
 
 void	unset(t_cmd *p)
 {
@@ -38,7 +38,7 @@ void	unset(t_cmd *p)
 		if (is_parameter_name_invalid(p->argv[i]) == true)
 		{
 			ft_fprintf(STDERR_FILENO,
-					"unset: %s: invalid parameter name\n", p->argv[i]);
+				"unset: %s: invalid parameter name\n", p->argv[i]);
 			p->data->ret_val = 1;
 		}
 		else
@@ -51,10 +51,12 @@ void	unset(t_cmd *p)
 	}
 }
 
-static bool is_parameter_name_invalid(char *s)
+static bool	is_parameter_name_invalid(char *s)
 {
 	size_t	i;
 
+	if (ft_isdigit(s[0]) == true)
+		return (true);
 	i = 0;
 	while (s[i] != '\0')
 	{
