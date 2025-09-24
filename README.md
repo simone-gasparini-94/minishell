@@ -2,6 +2,7 @@
 Simplified shell that replicates many fundamental behaviours of **bash**.
 
 It uses the **readline** API for input handling.
+`readline` memory leaks are not fixed.
 
 This project is collaboration with Dante Uccello:
 
