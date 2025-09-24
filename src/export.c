@@ -6,7 +6,7 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 12:48:38 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/24 11:49:17 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/24 11:54:59 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static bool is_parameter_name_invalid(char *s)
 {
 	size_t	i;
 
-	if (s[0] == '=')
+	if (s[0] == '=' || ft_isdigit(s[0]))
 		return (true);
 	i = 0;
 	while (s[i] != '=' && s[i] != '\0')
