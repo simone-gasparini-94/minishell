@@ -6,10 +6,11 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 12:48:38 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/22 14:21:35 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/24 10:32:52 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "built_in.h"
 #include "cmds.h"
 #include "data.h"
 #include "list.h"
@@ -23,15 +24,27 @@ static int	find_equal(char *s);
 void	ft_export(t_cmd *p)
 {
 	t_node	*node;
+	size_t	i;
 
 	if (p->argv[1] == NULL)
+	{
+		env(p);
 		return ;
-	if (ft_strchr(p->argv[1], '=') == NULL)
-		return ;
-	if (is_var_dup(p->argv[1], p->data->envp) == true)
-		delete_node(&p->data->envp, p->argv[1], find_equal(p->argv[1]));
-	node = create_node(p->argv[1]);
-	append_node(&p->data->envp, node);
+	}
+	i = 1;
+	while (p->argv[i] != NULL)
+	{
+		if (ft_strchr(p->argv[i], '=') == NULL)
+		{
+			i++;
+			continue ;
+		}
+		if (is_var_dup(p->argv[i], p->data->envp) == true)
+			delete_node(&p->data->envp, p->argv[i], find_equal(p->argv[i]));
+		node = create_node(p->argv[i]);
+		append_node(&p->data->envp, node);
+		i++;
+	}
 }
 
 static bool	is_var_dup(char *s, t_node *list)
