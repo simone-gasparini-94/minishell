@@ -6,7 +6,7 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 12:02:04 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/25 12:12:15 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/25 13:41:33 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	ft_exit(t_data *data, t_cmd *cmd)
 			free_data(data);
 		exit (status);
 	}
+	data->ret_val = 1;
 }
 
 static bool str_is_num(char *s)

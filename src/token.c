@@ -6,7 +6,7 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 13:43:50 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/15 15:08:15 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/25 14:07:27 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ t_tok	**tokenize(t_data *data, char *input)
 	}
 	if (create_tokens(data, tokens, tracker, input) == 1)
 	{
+		data->ret_val = 1;
 		free(tracker);
 		free_tokens(tokens, data);
 		return (NULL);
@@ -61,7 +62,7 @@ static char	*set_and_count(t_data *data, char *input)
 	i = 0;
 	while (tracker[i] != '\0')
 		tracker[i++] = '-';
-	data->n_tokens = count_tokens(input, tracker);
+	data->n_tokens = count_tokens(data, input, tracker);
 	if (data->n_tokens == 0)
 	{
 		free(tracker);
