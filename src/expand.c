@@ -6,7 +6,7 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 13:30:23 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/16 09:53:36 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/11 18:34:02 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ static char	*handle_expansion(t_tok *token, size_t i)
 	if (key == NULL)
 		return (NULL);
 	ft_strlcpy(key, &token->s[i], key_len + 1);
-	value = ft_getenv(token, key);
+	value = ft_getenv(token->data, key);
 	if (value != NULL)
 		new_string = replace_key_with_value(token->s, value, key_len + 1);
 	else

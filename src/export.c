@@ -6,7 +6,7 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 12:48:38 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/25 15:50:12 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/03 15:02:56 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 #include "cmds.h"
 #include "data.h"
 #include "ft_fprintf.h"
-#include "list.h"
 #include "libft.h"
+#include "list.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,8 +39,7 @@ void	ft_export(t_cmd *p)
 		p->argv[i] = trim_all_quotes(p->argv[i]);
 		if (is_parameter_name_invalid(p->argv[i]) == true)
 		{
-			ft_fprintf(STDERR_FILENO,
-				"export: %s: invalid parameter name\n", p->argv[i]);
+			ft_fprintf(2, "export: %s: invalid parameter\n", p->argv[i]);
 			p->data->ret_val = 1;
 		}
 		else if (ft_strchr(p->argv[i], '=') == NULL)
@@ -74,9 +73,9 @@ static bool	is_parameter_name_invalid(char *s)
 
 static char	*trim_all_quotes(char *arg)
 {
-	char	*new_str;
 	size_t	i;
 	size_t	c;
+	char	*new_str;
 
 	i = 0;
 	c = 0;

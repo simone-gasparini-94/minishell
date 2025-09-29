@@ -15,6 +15,7 @@
 #include "ft_fprintf.h"
 #include "get_next_line.h"
 #include "libft.h"
+#include "token.h"
 #include <errno.h>
 #include <fcntl.h>
 #include <stdbool.h>
@@ -23,7 +24,8 @@
 #include <string.h>
 #include <unistd.h>
 
-void	piping_heredoc(t_cmd *c);
+void		piping_heredoc(t_cmd *c);
+static void	open_outfiles(t_cmd *c);
 
 int	set_fds(t_cmd *c)
 {
@@ -37,19 +39,8 @@ int	set_fds(t_cmd *c)
 	{
 		ft_fprintf(STDERR_FILENO, "%s: %s\n", c->in_file, strerror(errno));
 		c->data->ret_val = 1;
-		return (1);
 	}
-	if (c->out_file != NULL)
-		c->out_fd = open(c->out_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else if (c->append_file != NULL)
-		c->out_fd = open(c->append_file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else
-		c->out_fd = STDOUT_FILENO;
-	if (c->out_fd == -1)
-	{
-		ft_fprintf(STDERR_FILENO, "%s: %s\n", c->out_file, strerror(errno));
-		c->data->ret_val = 1;
-	}
+	open_outfiles(c);
 	return (0);
 }
 
@@ -89,4 +80,60 @@ void	piping_heredoc(t_cmd *c)
 	free(line);
 	close(fd[WRITE]);
 	c->in_fd = fd[READ];
+}
+
+static void	open_outfiles(t_cmd *c)
+{
+	size_t	i;
+
+	i = 0;
+	if (c->n_out_fds == 0)
+		c->out_fd = STDOUT_FILENO;
+	while (i < (c->n_out_fds))
+	{
+		if (c->out_files[i].append == false)
+			c->out_fd = open(c->out_files[i].name, O_WRONLY | O_CREAT | O_TRUNC,
+					0644);
+		else if (c->out_files[i].append == true)
+			c->out_fd = open(c->out_files[i].name,
+					O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (c->out_fd == -1)
+		{
+			ft_fprintf(STDERR_FILENO, "%s: %s\n", c->out_files[i].name,
+				strerror(errno));
+			c->data->ret_val = 1;
+		}
+		if (i != c->n_out_fds - 1)
+			close(c->out_fd);
+		i++;
+	}
+}
+
+void	count_and_alloc_outfiles(t_cmd *cmd, t_tok **tokens, size_t index)
+{
+	size_t	start_index;
+	size_t	i;
+
+	start_index = index;
+	cmd->n_out_fds = 0;
+	while (index < cmd->data->n_tokens && tokens[index]->pipe == false)
+	{
+		if (tokens[index]->append_file == true
+			|| tokens[index]->output_file == true)
+			cmd->n_out_fds++;
+		index++;
+	}
+	cmd->out_files = malloc(sizeof(t_out) * cmd->n_out_fds);
+	if (!cmd->out_files)
+		return ;
+	i = 0;
+	while (start_index < cmd->data->n_tokens
+		&& tokens[start_index]->pipe == false)
+	{
+		if (tokens[start_index]->output_file == true)
+			cmd->out_files[i++].append = false;
+		else if (tokens[start_index]->append_file == true)
+			cmd->out_files[i++].append = true;
+		start_index++;
+	}
 }

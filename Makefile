@@ -19,6 +19,7 @@ SRCS		=	banner.c										\
 				export.c										\
 				file_descriptors.c								\
 				files.c											\
+				free.c											\
 				interpret.c										\
 				list.c											\
 				main.c											\

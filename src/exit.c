@@ -6,22 +6,22 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 12:02:04 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/25 13:41:33 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/09 17:27:32 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include "built_in.h"
+#include "clean.h"
+#include "cmds.h"
+#include "data.h"
+#include "ft_fprintf.h"
+#include "libft.h"
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "libft.h"
-#include "ft_fprintf.h"
-#include "built_in.h"
-#include "cmds.h"
-#include "clean.h"
-#include "data.h"
 
-static bool str_is_num(char *s);
+static bool	str_is_num(char *s);
 
 void	ft_exit(t_data *data, t_cmd *cmd)
 {
@@ -32,7 +32,7 @@ void	ft_exit(t_data *data, t_cmd *cmd)
 		ft_fprintf(cmd->out_fd, "exit\n");
 		if (cmd->data)
 			free_data(data);
-		exit (EXIT_SUCCESS);
+		exit(EXIT_SUCCESS);
 	}
 	else if (str_is_num(cmd->argv[1]) == false)
 		ft_fprintf(STDERR_FILENO, "exit: argument is not a number\n");
@@ -41,15 +41,15 @@ void	ft_exit(t_data *data, t_cmd *cmd)
 	else
 	{
 		ft_fprintf(cmd->out_fd, "exit\n");
-		status = (uint8_t) ft_atoi(cmd->argv[1]);
+		status = (uint8_t)ft_atoi(cmd->argv[1]);
 		if (cmd->data)
 			free_data(data);
-		exit (status);
+		exit(status);
 	}
 	data->ret_val = 1;
 }
 
-static bool str_is_num(char *s)
+static bool	str_is_num(char *s)
 {
 	size_t	i;
 

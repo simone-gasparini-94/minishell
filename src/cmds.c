@@ -73,8 +73,7 @@ t_cmd	*create_cmd(t_tok **tokens, t_data *data, size_t *i, size_t *j)
 	cmd->data = data;
 	cmd->argv = create_argv(tokens, data, i);
 	cmd->in_file = NULL;
-	cmd->out_file = NULL;
-	cmd->append_file = NULL;
+	cmd->out_files = NULL;
 	cmd->delimiter = NULL;
 	cmd->path = NULL;
 	cmd->envp = create_array(data->envp);
@@ -107,18 +106,20 @@ char	**create_argv(t_tok **tokens, t_data *data, size_t *index)
 void	populate_cmd(t_cmd *cmd, t_tok **tokens, size_t *index)
 {
 	size_t	i;
+	size_t	j;
 
 	if (tokens[*index]->pipe == true)
 		(*index)++;
 	i = 0;
+	j = 0;
+	count_and_alloc_outfiles(cmd, tokens, *index);
 	while (*index < cmd->data->n_tokens && tokens[*index]->pipe == false)
 	{
 		if (tokens[*index]->input_file == true)
 			cmd->in_file = ft_strdup(tokens[*index]->s);
-		else if (tokens[*index]->output_file == true)
-			cmd->out_file = ft_strdup(tokens[*index]->s);
-		else if (tokens[*index]->append_file == true)
-			cmd->append_file = ft_strdup(tokens[*index]->s);
+		else if (tokens[*index]->output_file == true
+			|| tokens[*index]->append_file == true)
+			cmd->out_files[j++].name = ft_strdup(tokens[*index]->s);
 		else if (tokens[*index]->heredoc_delimiter == true)
 			cmd->delimiter = ft_strdup(tokens[*index]->s);
 		else if (tokens[*index]->string == true)

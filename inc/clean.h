@@ -25,5 +25,6 @@ void					free_tokens(t_tok **tokens, t_data *data);
 void					free_cmds(t_cmd **cmds, size_t n);
 void					free_list(t_node *list);
 void					free_array(char **c);
+void					free_struct(t_cmd *cmd);
 
 #endif

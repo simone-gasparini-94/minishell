@@ -33,13 +33,12 @@ bool	create_path(t_cmd *cmd)
 
 	paths = parse_path(cmd->data->envp);
 	if (paths == NULL)
-		return (false);
-	path = join_path(cmd->argv[0], paths, cmd);
-	if (path == NULL)
 	{
-		free_array(paths);
+		ft_fprintf(STDERR_FILENO, "%s: path not found\n", cmd->argv[0]);
+		cmd->data->ret_val = 127;
 		return (false);
 	}
+	path = join_path(cmd->argv[0], paths, cmd);
 	free_array(paths);
 	cmd->path = path;
 	return (true);

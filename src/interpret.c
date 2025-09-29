@@ -6,7 +6,7 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 19:00:17 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/16 09:54:01 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/11 10:49:55 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include "list.h"
 #include "pipes.h"
 #include "token.h"
-#include "utils.h"
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <stdio.h>

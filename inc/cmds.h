@@ -13,12 +13,19 @@
 #ifndef CMDS_H
 # define CMDS_H
 
-# include <stdio.h>
 # include <stdbool.h>
+# include <stdio.h>
 
 typedef struct s_data	t_data;
 typedef struct s_tok	t_tok;
 typedef struct s_node	t_node;
+
+typedef struct s_out
+{
+	char				*name;
+	bool				append;
+}						t_out;
+
 typedef struct s_cmd
 {
 	t_data				*data;
@@ -27,11 +34,11 @@ typedef struct s_cmd
 	char				**envp;
 	char				*path;
 	char				*in_file;
-	char				*out_file;
-	char				*append_file;
+	t_out				*out_files;
 	char				*delimiter;
 	int					in_fd;
 	int					out_fd;
+	size_t				n_out_fds;
 }						t_cmd;
 
 t_cmd					**create_cmds(t_data *data);

@@ -5,130 +5,108 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/23 11:51:24 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/23 15:20:29 by sgaspari         ###   ########.fr       */
+/*   Created: 2025/06/17 13:32:13 by sgaspari          #+#    #+#             */
+/*   Updated: 2025/07/31 11:32:12 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdlib.h>
+#include <stddef.h>
 #include "libft.h"
-#include "get_next_line.h"
+#include "get_next_line_internal.h"
 
-static void	init_buffer(char **buffer);
-static char	*append_to_buffer(char **buffer, char *buf);
-static char	*extract_line(char **buffer);
-static char	*update_buffer(char **buffer);
+static char	*append_to_buffer(char *buffer, const char *read_buffer);
+static char	*extract_next_line(char *buffer);
+static char	*extract_new_buffer(char *buffer);
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer[MAX_FD];
-	char		buf[BUFFER_SIZE + 1];
 	char		*next_line;
-	ssize_t		num_read;
+	static char	*buffer;
+	char		read_buffer[BUFFER_SIZE + 1];
+	ssize_t		bytes_read;
 
-	if (fd < 0 || fd >= MAX_FD || BUFFER_SIZE <= 0)
+	if (fd < 0)
 		return (NULL);
-	init_buffer(&(buffer[fd]));
-	while (ft_strchr(buffer[fd], '\n') == NULL)
+	if (!buffer)
+		buffer = initialize_buffer();
+	while (!is_new_line_in_str(buffer))
 	{
-		num_read = read(fd, buf, BUFFER_SIZE);
-		if (num_read == -1)
-		{
-			free(buffer[fd]);
-			return (NULL);
-		}
-		if (num_read == 0)
+		bytes_read = read(fd, read_buffer, BUFFER_SIZE);
+		if (bytes_read == 0)
 			break ;
-		buf[num_read] = '\0';
-		buffer[fd] = append_to_buffer(&(buffer[fd]), buf);
+		if (bytes_read < 0)
+			return (NULL);
+		read_buffer[bytes_read] = '\0';
+		buffer = append_to_buffer(buffer, read_buffer);
 	}
-	next_line = extract_line(&(buffer[fd]));
-	buffer[fd] = update_buffer(&(buffer[fd]));
+	if (!buffer || buffer[0] == '\0')
+		return (free_buffer(&buffer));
+	next_line = extract_next_line(buffer);
+	buffer = extract_new_buffer(buffer);
 	return (next_line);
 }
 
-static void	init_buffer(char **buffer)
-{
-	if (*buffer == NULL)
-	{
-		*buffer = malloc(1);
-		if (*buffer == NULL)
-			return ;
-		(*buffer)[0] = '\0';
-	}
-}
-
-static char	*append_to_buffer(char **buffer, char *buf)
+static char	*append_to_buffer(char *buffer, const char *read_buffer)
 {
 	char	*new_buffer;
-	size_t	len_new;
 	size_t	len_buffer;
-	size_t	len_buf;
+	size_t	len_read_buffer;
+	size_t	len_new_buffer;
 
-	if (*buffer == NULL)
+	if (!buffer || !read_buffer)
 		return (NULL);
-	len_buffer = ft_strlen(*buffer);
-	len_buf = ft_strlen(buf);
-	len_new = len_buffer + len_buf;
-	new_buffer = malloc(len_new + 1);
-	if (new_buffer == NULL)
-	{
-		free(*buffer);
+	len_buffer = ft_strlen(buffer);
+	len_read_buffer = ft_strlen(read_buffer);
+	len_new_buffer = len_buffer + len_read_buffer;
+	new_buffer = (char *) malloc(len_new_buffer + 1);
+	if (!new_buffer)
 		return (NULL);
-	}
-	ft_strlcpy(new_buffer, *buffer, len_new + 1);
-	ft_strlcat(new_buffer, buf, len_new + 1);
-	free(*buffer);
-	*buffer = NULL;
+	new_buffer[0] = '\0';
+	ft_strlcat(new_buffer, buffer, len_new_buffer + 1);
+	free_buffer(&buffer);
+	ft_strlcat(new_buffer, read_buffer, len_new_buffer + 1);
 	return (new_buffer);
 }
 
-static char	*extract_line(char **buffer)
+static char	*extract_next_line(char *buffer)
 {
-	char	*line;
+	char	*next_line;
 	size_t	len;
 
-	if (*buffer == NULL)
-		return (NULL);
-	if ((*buffer)[0] == '\0')
-	{
-		free(*buffer);
-		*buffer = NULL;
-		return (NULL);
-	}
 	len = 0;
-	while ((*buffer)[len] != '\0' && (*buffer)[len] != '\n')
+	while (buffer[len] && buffer[len] != '\n')
 		len++;
-	if ((*buffer)[len] == '\n')
+	if (buffer[len] == '\n')
 		len++;
-	line = malloc(len + 1);
-	if (line == NULL)
-	{
-		free(*buffer);
-		*buffer = NULL;
+	next_line = (char *) malloc(len + 1);
+	if (!next_line)
 		return (NULL);
-	}
-	ft_strlcpy(line, *buffer, len + 1);
-	return (line);
+	next_line[0] = '\0';
+	ft_strlcat(next_line, buffer, len + 1);
+	return (next_line);
 }
 
-static char	*update_buffer(char **buffer)
+static char	*extract_new_buffer(char *buffer)
 {
-	char	*new;
+	char	*new_buffer;
+	size_t	i;
 	size_t	len;
 
-	if (*buffer == NULL)
-		return (NULL);
+	i = 0;
+	while (buffer[i] && buffer[i] != '\n')
+		i++;
+	if (buffer[i] == '\n')
+		i++;
 	len = 0;
-	while ((*buffer)[len] != '\0' && (*buffer)[len] != '\n')
+	while (buffer[i + len])
 		len++;
-	if ((*buffer)[len] == '\0')
-	{
-		free(*buffer);
+	new_buffer = (char *) malloc(len + 1);
+	if (!new_buffer)
 		return (NULL);
-	}
-	new = ft_strdup((*buffer) + len + 1);
-	free(*buffer);
-	return (new);
+	new_buffer[0] = '\0';
+	ft_strlcat(new_buffer, buffer + i, len + 1);
+	free_buffer(&buffer);
+	return (new_buffer);
 }

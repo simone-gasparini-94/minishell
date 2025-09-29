@@ -14,10 +14,10 @@
 #include "built_in.h"
 #include "cmds.h"
 #include "data.h"
-#include "libft.h"
 #include "execute.h"
 #include "files.h"
 #include "ft_fprintf.h"
+#include "libft.h"
 #include <signal.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -39,12 +39,11 @@ void	execute(t_cmd **cmds, t_data *data)
 	{
 		if (cmds[i]->argv[0] == NULL)
 			;
-		else if (cmd_is_built_in(cmds[i]->argv[0], data->built_ins) == true)
+		else if (cmd_is_built_in(cmds[i]->argv[0], data->built_ins) == true
+			&& cmds[i]->in_fd != -1)
 			handle_built_in(data, cmds[i]);
-		else if (create_path(cmds[i]) == true)
+		else if (create_path(cmds[i]) == true && cmds[i]->in_fd != -1)
 			pid[j++] = exec_binary(cmds[i]);
-		else if (i == data->n_cmds - 1)
-			data->ret_val = 127;
 		if (i != 0)
 			close(data->pipfd[i - 1][READ]);
 		if (i < data->n_cmds - 1)

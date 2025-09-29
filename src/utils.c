@@ -6,7 +6,7 @@
 /*   By: duccello <duccello@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 17:08:42 by duccello          #+#    #+#             */
-/*   Updated: 2025/09/16 09:56:19 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/04 16:22:59 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 #include "data.h"
 #include "libft.h"
 #include "list.h"
-#include "token.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <token.h>
 
 int	char_counter(char *input, char c)
 {
@@ -97,7 +97,7 @@ size_t	find_len(char *str, char c)
 	return (len);
 }
 
-char	*ft_getenv(t_tok *token, char *key)
+char	*ft_getenv(t_data *data, char *key)
 {
 	char	*s;
 	t_node	*curr;
@@ -106,7 +106,7 @@ char	*ft_getenv(t_tok *token, char *key)
 
 	s = NULL;
 	len_key = ft_strlen(key);
-	curr = token->data->envp;
+	curr = data->envp;
 	while (curr != NULL)
 	{
 		len_list = find_equal(curr->s);

@@ -13,11 +13,16 @@
 #ifndef FILES_H
 # define FILES_H
 
+# include <sys/types.h>
+
 typedef struct s_tok	t_tok;
 typedef struct s_cmd	t_cmd;
+typedef struct s_out	t_out;
 
 int						check_files(t_tok **tokens, int i);
 int						set_fds(t_cmd *c);
 void					close_fds(t_cmd **cmds);
+void					count_and_alloc_outfiles(t_cmd *cmd, t_tok **tokens,
+							size_t index);
 
 #endif

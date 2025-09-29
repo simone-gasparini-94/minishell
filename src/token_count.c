@@ -6,21 +6,21 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:06:34 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/25 14:11:12 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/15 14:54:35 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "data.h"
-#include "libft.h"
 #include "ft_fprintf.h"
+#include "libft.h"
 #include "token.h"
+#include "data.h"
 #include <stdbool.h>
 #include <unistd.h>
 
-static void	init_bools(bool *in_quote, bool *in_dquote, bool *in_word);
 static int	find_new_token(char *s, bool *in_word, int *counter, char *c);
 static void	handle_operator(bool *in_word, int *counter, char *c);
 static void	handle_character(bool *in_word, int *counter, char *c);
+static void	init_bools(bool *in_quote, bool *in_dquote, bool *in_word);
 
 int	count_tokens(t_data *data, char *s, char *tracker)
 {

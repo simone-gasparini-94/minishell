@@ -6,21 +6,23 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 15:32:36 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/25 15:56:40 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/15 14:02:17 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bin.h"
-#include "data.h"
 #include "clean.h"
+#include "data.h"
+#include "ft_fprintf.h"
+#include "signals.h"
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/wait.h>
-#include "signals.h"
-#include <unistd.h>
-#include <errno.h>
 #include <string.h>
-#include "ft_fprintf.h"
+#include <sys/wait.h>
+#include <unistd.h>
+
+#define CMD_NOT_FOUND 127
 
 static void	close_unused_child_pipes(t_data *data, int in_use, int out_use);
 
@@ -28,6 +30,10 @@ int	exec_binary(t_cmd *c)
 {
 	int	pid;
 
+	if (c->path != NULL && access(c->path, X_OK) == 0)
+		c->data->ret_val = 0;
+	else 
+		c->data->ret_val = 127;
 	pid = fork();
 	if (pid == 0)
 		run_child_process(c);
@@ -43,16 +49,21 @@ void	run_child_process(t_cmd *c)
 	close_unused_child_pipes(c->data, c->in_fd, c->out_fd);
 	if (c->in_fd != STDIN_FILENO)
 	{
-		dup2(c->in_fd, STDIN_FILENO);
-		close(c->in_fd);
+		if (c->in_fd != -1)
+		{
+			dup2(c->in_fd, STDIN_FILENO);
+			close(c->in_fd);
+		}
 	}
 	if (c->out_fd != STDOUT_FILENO)
 	{
 		dup2(c->out_fd, STDOUT_FILENO);
 		close(c->out_fd);
 	}
-	if (access(c->path, X_OK) == 0)
+	if (c->path != NULL && access(c->path, X_OK) == 0 && c->in_fd != -1)
 		execve(c->path, c->argv, c->envp);
+	free_data(c->data);
+	exit(EXIT_FAILURE);
 }
 
 static void	close_unused_child_pipes(t_data *data, int in_use, int out_use)
