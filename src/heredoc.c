@@ -6,7 +6,7 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 14:24:25 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/30 15:05:32 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/30 16:58:40 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+
+#define BUF_LEN 1024
 
 static void	run_child_process(t_cmd *c, int *fd); 
 
@@ -41,10 +43,14 @@ void	fork_heredoc(t_cmd *c)
 		perror("fork");
 		return ;
 	}
-	else if (pid == 0)
+	if (pid == 0)
+	{
+		close(fd[READ]);
 		run_child_process(c, fd);
+	}
 	else
 	{
+		close(fd[WRITE]);
 		g_flag = 0;
 		waitpid(pid, &status, 0);
 		c->data->ret_val = get_return_val(status);
@@ -55,22 +61,29 @@ void	fork_heredoc(t_cmd *c)
 
 static void	run_child_process(t_cmd *c, int *fd)
 {
-	char	*line;
+	char	buf[BUF_LEN];
 	char	*tmp;
+	ssize_t	num_read;
 	
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	line = get_next_line(STDIN_FILENO);
 	tmp = c->delimiter;
 	c->delimiter = ft_strjoin(c->delimiter, "\n");
 	free(tmp);
-	while (line && ft_strncmp(line, c->delimiter, ft_strlen(c->delimiter)) != 0)
+	while (1)
 	{
-		write(fd[WRITE], line, ft_strlen(line));
-		free(line);
-		line = get_next_line(STDIN_FILENO);
+		num_read = read(1, buf, BUF_LEN);
+		if (num_read == -1)
+		{
+			perror("read");
+			return ;
+		}
+		if (num_read == 0)
+			break ;
+		if (ft_strncmp(buf, c->delimiter, ft_strlen(c->delimiter)) == 0)
+			break ;
+		write(fd[WRITE], buf, num_read);
 	}
-	free(line);
 	close(fd[WRITE]);
 	exit(EXIT_SUCCESS);
 }
