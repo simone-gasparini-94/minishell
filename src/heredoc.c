@@ -6,7 +6,7 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 14:24:25 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/30 15:01:17 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/30 15:05:32 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ void	fork_heredoc(t_cmd *c)
 	}
 }
 
-static void	run_child_process(t_cmd *c, int *fd);
+static void	run_child_process(t_cmd *c, int *fd)
 {
-	char	line;
+	char	*line;
 	char	*tmp;
 	
 	signal(SIGINT, SIG_DFL);
