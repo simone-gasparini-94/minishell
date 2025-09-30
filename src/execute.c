@@ -6,7 +6,7 @@
 /*   By: duccello <duccello@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 13:02:00 by duccello          #+#    #+#             */
-/*   Updated: 2025/09/15 14:16:31 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/30 14:44:47 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	execute(t_cmd **cmds, t_data *data)
 			;
 		else if (cmd_is_built_in(cmds[i]->argv[0], data->built_ins) == true
 			&& cmds[i]->in_fd != -1)
-			handle_built_in(data, cmds[i]);
+			handle_built_in(data, cmds[i], i);
 		else if (create_path(cmds[i]) == true && cmds[i]->in_fd != -1)
 			pid[j++] = exec_binary(cmds[i]);
 		if (i != 0)
@@ -85,8 +85,12 @@ void	pids_and_ret(int *pid, int j, t_data *data)
 		while (i < j)
 			waitpid(pid[i++], &status, 0);
 		g_flag = 0;
-		if (data->ret_val != 127)
+		if (data->ret_val != CMD_NOT_FOUND 
+				&& data->heredoc_killed == false
+				&& data->last_cmd_built_in == false)
+		{
 			data->ret_val = get_return_val(status);
+		}
 		free(pid);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 19:00:17 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/11 10:49:55 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/30 14:46:49 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ int	init(t_data *data, char *s)
 	data->cmds = NULL;
 	data->pipfd = NULL;
 	data->tokens = tokenize(data, s);
+	data->last_cmd_built_in = false;
+	data->heredoc_killed = false;
 	if (data->tokens == NULL)
 		return (1);
 	data->cmds = create_cmds(data);

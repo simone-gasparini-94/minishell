@@ -6,15 +6,15 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 13:46:10 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/10 13:39:05 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/30 14:31:34 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmds.h"
 #include "data.h"
 #include "ft_fprintf.h"
-#include "get_next_line.h"
 #include "libft.h"
+#include "files.h"
 #include "token.h"
 #include <errno.h>
 #include <fcntl.h>
@@ -24,7 +24,6 @@
 #include <string.h>
 #include <unistd.h>
 
-void		piping_heredoc(t_cmd *c);
 static void	open_outfiles(t_cmd *c);
 
 int	set_fds(t_cmd *c)
@@ -32,7 +31,7 @@ int	set_fds(t_cmd *c)
 	if (c->in_file != NULL)
 		c->in_fd = open(c->in_file, O_RDONLY);
 	else if (c->delimiter != NULL)
-		piping_heredoc(c);
+		fork_heredoc(c);
 	else
 		c->in_fd = STDIN_FILENO;
 	if (c->in_fd == -1)
@@ -57,29 +56,6 @@ void	close_fds(t_cmd **cmds)
 			close(cmds[i]->out_fd);
 		i++;
 	}
-}
-
-void	piping_heredoc(t_cmd *c)
-{
-	int		fd[2];
-	char	*line;
-	char	*tmp;
-
-	if (pipe(fd) == -1)
-		exit(1);
-	line = get_next_line(STDIN_FILENO);
-	tmp = c->delimiter;
-	c->delimiter = ft_strjoin(c->delimiter, "\n");
-	free(tmp);
-	while (line && ft_strncmp(line, c->delimiter, ft_strlen(c->delimiter)) != 0)
-	{
-		write(fd[WRITE], line, ft_strlen(line));
-		free(line);
-		line = get_next_line(STDIN_FILENO);
-	}
-	free(line);
-	close(fd[WRITE]);
-	c->in_fd = fd[READ];
 }
 
 static void	open_outfiles(t_cmd *c)

@@ -6,7 +6,7 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 11:00:31 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/09 17:26:55 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/30 14:50:22 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,12 @@ char	**create_built_ins(void)
 	return (arr);
 }
 
-void	handle_built_in(t_data *data, t_cmd *cmd)
+void	handle_built_in(t_data *data, t_cmd *cmd, size_t i)
 {
-	data->ret_val = 0;
+	if (data->heredoc_killed == false)
+		data->ret_val = 0;
+	if (i + 1 == data->n_cmds)
+		data->last_cmd_built_in = true;
 	if (ft_strncmp(cmd->argv[0], data->built_ins[ECHO], ft_strlen(cmd->argv[0])
 			+ 1) == 0)
 		echo(cmd);

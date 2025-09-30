@@ -20,6 +20,7 @@ SRCS		=	banner.c										\
 				file_descriptors.c								\
 				files.c											\
 				free.c											\
+				heredoc.c										\
 				interpret.c										\
 				list.c											\
 				main.c											\

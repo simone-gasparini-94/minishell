@@ -6,7 +6,7 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 15:32:36 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/15 14:02:17 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/30 14:45:00 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,23 +22,24 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#define CMD_NOT_FOUND 127
-
 static void	close_unused_child_pipes(t_data *data, int in_use, int out_use);
 
 int	exec_binary(t_cmd *c)
 {
 	int	pid;
 
+	pid = 0;
 	if (c->path != NULL && access(c->path, X_OK) == 0)
+	{
 		c->data->ret_val = 0;
+		pid = fork();
+		if (pid == 0)
+			run_child_process(c);
+		else
+			g_flag = 1;
+	}
 	else 
-		c->data->ret_val = 127;
-	pid = fork();
-	if (pid == 0)
-		run_child_process(c);
-	else
-		g_flag = 1;
+		c->data->ret_val = CMD_NOT_FOUND;
 	return (pid);
 }
 
