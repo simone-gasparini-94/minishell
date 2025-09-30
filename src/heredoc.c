@@ -6,7 +6,7 @@
 /*   By: sgaspari <sgaspari@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 14:24:25 by sgaspari          #+#    #+#             */
-/*   Updated: 2025/09/30 16:58:40 by sgaspari         ###   ########.fr       */
+/*   Updated: 2025/09/30 17:29:12 by sgaspari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,13 @@
 #include "execute.h"
 #include "libft.h"
 #include "token.h"
-#include "get_next_line.h"
 #include "signals.h"
+#include <readline/readline.h>
 #include <sys/wait.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-
-#define BUF_LEN 1024
 
 static void	run_child_process(t_cmd *c, int *fd); 
 
@@ -45,6 +43,7 @@ void	fork_heredoc(t_cmd *c)
 	}
 	if (pid == 0)
 	{
+		g_flag = 1;
 		close(fd[READ]);
 		run_child_process(c, fd);
 	}
@@ -61,28 +60,23 @@ void	fork_heredoc(t_cmd *c)
 
 static void	run_child_process(t_cmd *c, int *fd)
 {
-	char	buf[BUF_LEN];
-	char	*tmp;
-	ssize_t	num_read;
+	char	*line;
 	
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	tmp = c->delimiter;
-	c->delimiter = ft_strjoin(c->delimiter, "\n");
-	free(tmp);
 	while (1)
 	{
-		num_read = read(1, buf, BUF_LEN);
-		if (num_read == -1)
+		line = readline("> ");
+		if (line == NULL)
+			break ;
+		if (ft_strncmp(line, c->delimiter, ft_strlen(c->delimiter)) == 0)
 		{
-			perror("read");
-			return ;
+			free(line);
+			break ;
 		}
-		if (num_read == 0)
-			break ;
-		if (ft_strncmp(buf, c->delimiter, ft_strlen(c->delimiter)) == 0)
-			break ;
-		write(fd[WRITE], buf, num_read);
+		write(fd[WRITE], line, ft_strlen(line));
+		write(fd[WRITE], "\n", 1);
+		free(line);
 	}
 	close(fd[WRITE]);
 	exit(EXIT_SUCCESS);
