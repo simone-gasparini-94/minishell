@@ -1,10 +1,9 @@
 ## Description
 Simplified shell that replicates many fundamental behaviours of **Bash**.
 
-It uses the [readline](https://www.man7.org/linux/man-pages/man3/readline.3.html) API for input handling.
-`readline` memory leaks are not fixed.
+It uses the [readline](https://www.man7.org/linux/man-pages/man3/readline.3.html) API for input handling. Its memory leaks are not fixed.
 
-This project is collaboration with [Dante Uccello](https://github.com/duccello).
+This project is a collaboration with [Dante Uccello](https://github.com/duccello).
 
 ## Features
 - Built-in commands:
