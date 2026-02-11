@@ -35,6 +35,6 @@ int	main(int argc, char *argv[], char *envp[])
 		interpret(data, s);
 		free(s);
 	}
-	rl_clear_history();
+	ls_clear_history();
 	return (0);
 }

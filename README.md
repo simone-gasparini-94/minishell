@@ -1,9 +1,11 @@
+*This project has been created as part of the 42 curriculum in collaboration with [Dante Uccello](https://github.com/duccello)*
+
 ## Description
 Simplified shell that replicates many fundamental behaviours of **Bash**.
 
-It uses the [readline](https://www.man7.org/linux/man-pages/man3/readline.3.html) API for input handling. Its memory leaks are not fixed.
+It uses the [readline](https://www.man7.org/linux/man-pages/man3/readline.3.html) API for input handling.
 
-This project is a collaboration with [Dante Uccello](https://github.com/duccello).
+*Note: some functions of the readline API leak memory, these leaks are not explicitly cleaned in this project.*
 
 ## Features
 - Built-in commands:
