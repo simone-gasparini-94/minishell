@@ -1,5 +1,7 @@
 *This project has been created as part of the 42 curriculum in collaboration with [Dante Uccello](https://github.com/duccello)*
 
+# Minishell
+
 ![Screenshot](./assets/screenshot.png)
 
 ## Description
@@ -21,7 +23,6 @@ Clone this repository via the web URL:
 git clone https://github.com/simone-gasparini-94/minishell.git
 ```
 Change to the project directory:
-
 ```bash
 cd minishell
 ```
