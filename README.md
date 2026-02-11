@@ -18,7 +18,7 @@ To avoid platform-specific issues, the project uses a Docker container installed
 Clone this repository via the web URL:
 
 ```bash
-https://github.com/simone-gasparini-94/minishell.git
+git clone https://github.com/simone-gasparini-94/minishell.git
 ```
 Change to the project directory:
 
