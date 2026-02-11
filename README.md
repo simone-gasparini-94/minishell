@@ -1,5 +1,7 @@
 *This project has been created as part of the 42 curriculum in collaboration with [Dante Uccello](https://github.com/duccello)*
 
+![Screenshot](./assets/screenshot.png)
+
 ## Description
 Simplified shell that replicates many fundamental behaviours of **Bash**.
 
