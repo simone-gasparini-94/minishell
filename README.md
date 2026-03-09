@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum in collaboration with [Dante Uccello](https://github.com/duccello)*
+*This project has been created as part of the 42 curriculum in collaboration with [Dante Uccello](https://github.com/duccello).*
 
 # Minishell
 
