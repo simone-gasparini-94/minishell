@@ -22,13 +22,13 @@ To avoid platform-specific issues, the project uses a Docker container installed
 Pull the image directly from Docker Hub:
 
 ```bash
-docker pull sgasparini/minishell
+docker pull sgasparini/minishell:1
 ```
 
 Run the container
 
 ```bash
-docker run -it sgasparini/minishell
+docker run -it sgasparini/minishell:1
 ```
 
 ### Other Architectures
@@ -47,12 +47,12 @@ cd minishell
 Build the Docker image:
 
 ```bash
-docker build -t minishell .
+docker build -t minishell:1 .
 ```
 
 Run the container in interactive mode:
 ```bash
-docker run -it minishell
+docker run -it minishell:1
 ```
 
 ## Features
