@@ -17,10 +17,10 @@ To avoid platform-specific issues, the project uses a Docker container installed
 
 *Note: to run this project you need to have [Docker](https://www.docker.com/) installed. You can find the installation guide [here](https://docs.docker.com/desktop/?_gl=1*19toit*_gcl_au*MTYyMDUxNDMyNC4xNzcwMDIzNTk3*_ga*NTM5NTMzMTIwLjE3NzAwMjM1OTg.*_ga_XJWPQMJYHQ*czE3NzA4MDE0ODUkbzQkZzEkdDE3NzA4MDE0ODYkajU5JGwwJGgw).*
 
-Clone this repository via the web URL or SSH:
+Clone this repository:
 
 ```bash
-git clone https://github.com/simone-gasparini-94/minishell.git
+git clone https://github.com/s-gas/minishell.git
 ```
 
 Change to the project directory:
