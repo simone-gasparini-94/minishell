@@ -25,18 +25,18 @@ git clone https://github.com/s-gas/minishell.git
 
 Change to the project directory:
 ```bash
-cd minishell/srcs
+cd minishell
 ```
 
 Build the Docker image:
 
 ```bash
-docker build -t minishell .
+docker build -t minishell:1 .
 ```
 
 Run the container in interactive mode:
 ```bash
-docker run -it minishell
+docker run --rm -it minishell:1
 ```
 
 ## Features
