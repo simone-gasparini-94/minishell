@@ -2,10 +2,11 @@
 
 # minishell
 
-![Screenshot](./assets/screenshot.png)
+![C](https://img.shields.io/badge/C-00599C?logo=c&logoColor=white)
 
-## Description
 Simplified shell that replicates many fundamental behaviours of **Bash**.
+
+![Screenshot](./assets/screenshot.png)
 
 It uses the [GNU readline](https://www.man7.org/linux/man-pages/man3/readline.3.html) API for input handling.
 
