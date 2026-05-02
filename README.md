@@ -7,8 +7,6 @@
 
 Simplified shell that replicates many fundamental behaviours of **Bash**.
 
-![Screenshot](./assets/screenshot.png)
-
 It uses the [GNU readline](https://www.man7.org/linux/man-pages/man3/readline.3.html) API for input handling.
 
 To avoid platform-specific issues, the project uses a Docker container installed with Ubuntu and GNU readline.
